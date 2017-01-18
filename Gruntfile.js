@@ -50,9 +50,10 @@ module.exports = function(grunt) {
     },
 
     shell: {
-      prodServer: {
-      }
-    },
+      // prodServer: {
+      // }
+      gitpushlive: 'git push live master'
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -79,6 +80,10 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
   ]);
 
+  grunt.registerTask('startserver', [
+    'nodemon'
+  ]);
+
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task here
@@ -88,7 +93,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
+    'shell:gitpushlive'
   ]);
 
 
