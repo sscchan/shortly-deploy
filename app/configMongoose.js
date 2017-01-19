@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+
 mongoose.connect('mongodb://localhost/test');
 
 var mongodb = mongoose.connection;
@@ -23,21 +25,12 @@ var urlsSchema = mongoose.Schema({
   'created_at': Date,
   'updated_at': Date
 });
-
-var usersSchema = mongoose.Schema({
-  username: String,
-  password: String,
-  'created_at': Date,
-  'updated_at': Date
-});
-
 var Urls = mongoose.model('Urls', urlsSchema);
-var Users = mongoose.model('Users', usersSchema);
+
+module.exports = mongoose;
 
 
-module.exports = mongodb;
-module.exports.Urls = Urls;
-module.exports.Users = Users;
+// Old SQL Code using Bookshelf As Reference (TO BE REMOVED)
 
 // db.knex.schema.hasTable('urls').then(function(exists) {
 //   if (!exists) {

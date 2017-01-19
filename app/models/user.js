@@ -33,21 +33,25 @@ var usersSchema = mongoose.Schema({
   'updated_at': Date
 });
 
-usersSchema.method.comparePassword = function(attemptedPassword, callback) {
+usersSchema.methods.comparePassword = function(attemptedPassword, callback) {
+  // console.log('user.comparePassword: ', attemptedPassword, ' against ', this.password);
   bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
     callback(isMatch);
   });
 };
 
-usersSchema.method.hashPassword = function() {
+usersSchema.methods.hashPassword = function() {
   var cipher = Promise.promisify(bcrypt.hash);
-  return cipher(this.get('password'), null, null).bind(this)
+  return cipher(this.password, null, null).bind(this)
     .then(function(hash) {
-      this.set('password', hash);
+      this.password = hash;
+      console.log('user.hashPassword function: hashvalue: ', hash);
+      this.save();
     });
 };
 
 var User = mongoose.model('Users', usersSchema);
 
+console.log(User.comparePassword);
 
 module.exports = User;
