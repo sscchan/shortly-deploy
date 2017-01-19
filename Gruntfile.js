@@ -8,7 +8,15 @@ module.exports = function(grunt) {
         dest: 'public/dist/client.js'
       },
       libJS: {
-        src: ['public/lib/**/*.js'],
+        // src: ['public/lib/**/*.js'],
+
+        // We need to concat our lib files in specific order for it
+        // to work properly
+        src: ['public/lib/jquery.js',
+              'public/lib/underscore.js',
+              'public/lib/backbone.js',
+              'public/lib/handlebars.js',                            
+              ],
         dest: 'public/dist/lib.js'
       }
     },
