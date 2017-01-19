@@ -1,9 +1,11 @@
-var request = require('supertest');
+// var request = require('supertest');
+var request = require('supertest-session');
 var express = require('express');
 var expect = require('chai').expect;
 var app = require('../server-config.js');
 
-var db = require('../app/config');
+// var db = require('../app/config');
+var db = require('../app/configMongoose');
 var User = require('../app/models/user');
 var Link = require('../app/models/link');
 
@@ -11,7 +13,7 @@ var Link = require('../app/models/link');
 // NOTE: these tests are designed for mongo!
 /////////////////////////////////////////////////////
 
-xdescribe('', function() {
+describe('', function() {
 
   beforeEach(function(done) {
     // Log out currently signed in user
@@ -24,8 +26,29 @@ xdescribe('', function() {
         User.remove({username: 'Savannah'}).exec();
         User.remove({username: 'Phillip'}).exec();
 
-        done();
+        ////
+        request(app)
+          .post('/signup')
+          .send({
+            username: 'Savannah',
+            password: 'Sava'
+          })
+          .end(function (err, res) {
+            request(app)
+            .post('/signin')
+            .send({
+              username: 'Savannah',
+              password: 'Sava'
+            })
+            .expect(302)
+            .end(function(err, res) {
+              done();
+            });
+          });
+        ////
       });
+
+
   });
 
   describe('Link creation: ', function() {
@@ -54,7 +77,7 @@ xdescribe('', function() {
           .end(done);
       });
 
-      it('New links create a database entry', function(done) {
+      xit('New links create a database entry', function(done) {
         request(app)
           .post('/links')
           .send({
@@ -70,7 +93,7 @@ xdescribe('', function() {
           .end(done);
       });
 
-      it('Fetches the link url title', function(done) {
+      xit('Fetches the link url title', function(done) {
         request(app)
           .post('/links')
           .send({
@@ -88,7 +111,7 @@ xdescribe('', function() {
 
     }); // 'Shortening Links'
 
-    describe('With previously saved urls: ', function() {
+    xdescribe('With previously saved urls: ', function() {
 
       beforeEach(function(done) {
         link = new Link({
@@ -103,7 +126,7 @@ xdescribe('', function() {
         });
       });
 
-      it('Returns the same shortened code if attempted to add the same URL twice', function(done) {
+      xit('Returns the same shortened code if attempted to add the same URL twice', function(done) {
         var firstCode = link.code;
         request(app)
           .post('/links')
@@ -117,7 +140,7 @@ xdescribe('', function() {
           .end(done);
       });
 
-      it('Shortcode redirects to correct url', function(done) {
+      xit('Shortcode redirects to correct url', function(done) {
         var sha = link.code;
         request(app)
           .get('/' + sha)
@@ -208,13 +231,15 @@ xdescribe('', function() {
   describe('Account Login:', function() {
 
     beforeEach(function(done) {
-      new User({
-        'username': 'Phillip',
-        'password': 'Phillip'
-      }).save(function() {
-        done();
-      });
+      request(app)
+        .post('/signup')
+        .send({
+          'username': 'Phillip',
+          'password': 'Phillip'
+        })
+        .end(done);
     });
+
 
     it('Logs in existing users', function(done) {
       request(app)
