@@ -3,6 +3,14 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      clientJS: {
+        src: ['public/client/**/*.js'],
+        dest: 'public/dist/client.js'
+      },
+      libJS: {
+        src: ['public/lib/**/*.js'],
+        dest: 'public/dist/lib.js'
+      }
     },
 
     mochaTest: {
@@ -21,15 +29,40 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      target: {
+        files: [{
+          expand: true,
+          cwd: 'public/dist',
+          src: ['*.js', '!*.min.js'],
+          dest: 'public/dist',
+          ext: '.min.js'
+        }]
+      }
     },
 
     eslint: {
-      target: [
-        // Add list of files to lint here
-      ]
+      options: {
+        quiet: true
+      },
+      target: {
+        files: [{
+          expand: true,
+          //cwd: '',
+          src: ['**/*.js', '!**/*.min.js'],
+        }]
+      }
     },
 
     cssmin: {
+      target: {
+        files: [{
+          expand: true,
+          cwd: 'public',
+          src: ['*.css', '!*.min.css'],
+          dest: 'public/dist',
+          ext: '.min.css'
+        }]
+      }
     },
 
     watch: {
@@ -60,6 +93,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-eslint');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
@@ -78,6 +112,10 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'concat:clientJS',
+    'concat:libJS',
+    'uglify',
+    'cssmin'
   ]);
 
   grunt.registerTask('startserver', [
@@ -93,6 +131,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
+    'eslint',
     'shell:gitpushlive'
   ]);
 

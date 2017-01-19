@@ -28,6 +28,7 @@
     "grunt": "^0.4.4",
     "grunt-contrib-concat": "^1.0.0",
     "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-eslint": "0.0.5",
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-eslint": "^18.0.0",
