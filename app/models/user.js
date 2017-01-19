@@ -45,7 +45,7 @@ usersSchema.methods.hashPassword = function() {
   return cipher(this.password, null, null).bind(this)
     .then(function(hash) {
       this.password = hash;
-      console.log('user.hashPassword function: hashvalue: ', hash);
+      // console.log('user.hashPassword function: hashvalue: ', hash);
       this.save();
     });
 };

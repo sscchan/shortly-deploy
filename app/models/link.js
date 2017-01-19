@@ -34,13 +34,15 @@ var urlsSchema = mongoose.Schema({
 urlsSchema.methods.createShortenedURL = function() {
   // console.log('link.js: createShortenedURL: this: ', this);
   var urlToShorten = this.url;
-  
+  var currentLink = this;
+
   return new Promise(function(resolve, reject) {
     var shasum = crypto.createHash('sha1');
-    console.log('link.js: createShortenedURL: url argument for shasum.update: ', urlToShorten);
+    // console.log('link.js: createShortenedURL: url argument for shasum.update: ', urlToShorten);
     shasum.update(urlToShorten);
-    this.code = shasum.digest('hex').slice(0, 5);
-    resolve(this.code);
+    currentLink.code = shasum.digest('hex').slice(0, 5);
+    // console.log('link.js: createShortenedURL: link object: ', currentLink);
+    resolve(currentLink.code);
   });
 };
 
