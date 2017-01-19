@@ -108,6 +108,7 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
+    'eslint',
     'mochaTest'
   ]);
 
@@ -131,7 +132,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
-    'eslint',
+    'test',
     'shell:gitpushlive'
   ]);
 
