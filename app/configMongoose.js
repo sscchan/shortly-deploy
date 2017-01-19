@@ -16,17 +16,6 @@ mongodb.on('open', function() {
 
 });
 
-var urlsSchema = mongoose.Schema({
-  url: String,
-  baseUrl: String,
-  code: String,
-  title: String,
-  visits: Number,
-  'created_at': Date,
-  'updated_at': Date
-});
-var Urls = mongoose.model('Urls', urlsSchema);
-
 module.exports = mongoose;
 
 
